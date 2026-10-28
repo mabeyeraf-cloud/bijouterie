@@ -1,0 +1,18 @@
+services:
+  app:
+    image: mcr.microsoft.com/devcontainers/javascript-node:20
+    volumes:
+      - ../..:/workspaces:cached
+    command: sleep infinity
+    network_mode: service:db
+  db:
+    image: postgres:16
+    restart: unless-stopped
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    environment:
+      POSTGRES_USER: sagfa
+      POSTGRES_PASSWORD: sagfa
+      POSTGRES_DB: sagfa
+volumes:
+  pgdata:
