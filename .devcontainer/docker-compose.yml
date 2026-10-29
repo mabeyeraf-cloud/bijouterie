@@ -11,8 +11,8 @@ services:
     volumes:
       - pgdata:/var/lib/postgresql/data
     environment:
-      POSTGRES_USER: sagfa
-      POSTGRES_PASSWORD: sagfa
-      POSTGRES_DB: sagfa
+      POSTGRES_USER: bijouterie
+      POSTGRES_PASSWORD: bijouterie
+      POSTGRES_DB: bijouterie
 volumes:
   pgdata:

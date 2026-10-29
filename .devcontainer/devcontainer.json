@@ -1,5 +1,5 @@
 {
-  "name": "Groupe SAGFA",
+  "name": "Bijouterie",
   "dockerComposeFile": "docker-compose.yml",
   "service": "app",
   "workspaceFolder": "/workspaces/${localWorkspaceFolderBasename}",

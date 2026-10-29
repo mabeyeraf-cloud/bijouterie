@@ -5,38 +5,28 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { AnimatePresence, motion } from "motion/react";
 import Logo from "./Logo";
+import { categories, site } from "@/lib/site";
 
 type Sub = { href: string; label: string; section?: string };
 type Entry = { label: string; href?: string; section?: string; match?: string; children?: Sub[] };
 
-const phone = { label: "77 587 35 78", href: "tel:+221775873578" };
-
 const entries: Entry[] = [
   { label: "Accueil", href: "/" },
   {
-    label: "Le cabinet",
+    label: "Collections",
+    match: "/collections",
     children: [
-      { href: "/#approche", label: "Notre approche", section: "approche" },
-      { href: "/#methode", label: "Notre méthode", section: "methode" },
-      { href: "/a-propos", label: "À propos" },
-      { href: "/notre-histoire", label: "Notre histoire" },
+      { href: "/collections", label: "Toutes les pièces" },
+      ...categories.map((c) => ({ href: `/collections?categorie=${c.id}`, label: c.label })),
     ],
   },
-  {
-    label: "Nos services",
-    section: "services",
-    match: "/metiers",
-    children: [
-      { href: "/metiers/informatique", label: "Informatique" },
-      { href: "/metiers/comptabilite", label: "Comptabilité" },
-      { href: "/metiers/fiscalite", label: "Fiscalité" },
-      { href: "/metiers/paie-rh", label: "GRH" },
-      { href: "/metiers/ipm", label: "IPM" },
-    ],
-  },
-  { label: "SAGFA360", href: "/sagfa360", match: "/sagfa360" },
-  { label: "Partenaires", href: "/#partenaires", section: "partenaires" },
+  { label: "Mariage", href: "/#mariage", section: "mariage" },
+  { label: "Sur mesure", href: "/#sur-mesure", section: "sur-mesure" },
+  { label: "La Maison", href: "/la-maison", match: "/la-maison" },
+  { label: "Contact", href: "/#contact", section: "contact" },
 ];
+
+type Phone = { label: string; href: string } | null;
 
 const ease = [0.22, 1, 0.36, 1] as const;
 
@@ -75,7 +65,8 @@ function useActive() {
   const pathname = usePathname();
   const home = pathname === "/";
   const section = useHomeSection(home);
-  const sub = (s: Sub) => (home ? !!section && s.section === section : !s.href.includes("#") && pathname.startsWith(s.href));
+  const sub = (s: Sub) =>
+    home ? !!section && s.section === section : !s.href.includes("#") && !s.href.includes("?") && pathname === s.href;
   const entry = (e: Entry) => {
     if (e.href === "/") return home && !section;
     if (home && e.section && e.section === section) return true;
@@ -192,7 +183,7 @@ function Dropdown({ entry, current, isSub }: { entry: Entry; current: boolean; i
 }
 
 /* Panneau plein écran du mobile : liens en cascade, sous-menus dépliables, téléphone et contact en bas. */
-function MobilePanel({ id, isEntry, isSub, onClose }: { id: string; isEntry: (e: Entry) => boolean; isSub: (s: Sub) => boolean; onClose: () => void }) {
+function MobilePanel({ id, phone, isEntry, isSub, onClose }: { id: string; phone: Phone; isEntry: (e: Entry) => boolean; isSub: (s: Sub) => boolean; onClose: () => void }) {
   const [expanded, setExpanded] = useState<string | null>(null);
 
   useEffect(() => {
@@ -276,14 +267,14 @@ function MobilePanel({ id, isEntry, isSub, onClose }: { id: string; isEntry: (e:
         })}
       </motion.ul>
       <motion.div className="mpanel__foot" initial={{ opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.4, ease, delay: 0.4 }}>
-        <a href={phone.href} className="navbar__phone"><PhoneIcon />{phone.label}</a>
-        <Link href="/#contact" className="btn btn--halo">Nous contacter</Link>
+        {phone && <a href={phone.href} className="navbar__phone"><PhoneIcon />{phone.label}</a>}
+        <Link href="/rendez-vous" className="btn btn--gold">Prendre rendez-vous</Link>
       </motion.div>
     </motion.div>
   );
 }
 
-export default function Header() {
+export default function Header({ phone }: { phone: Phone }) {
   const active = useActive();
   const [menu, setMenu] = useState(false);
   const panelId = useId();
@@ -299,8 +290,8 @@ export default function Header() {
       onClick={(e) => { if ((e.target as Element).closest("a")) setMenu(false); }}
     >
       <div className="navbar">
-        <Link href="/" className="brand" aria-label="Groupe Sagfa — accueil">
-          <Logo variant="dark" />
+        <Link href="/" className="brand" aria-label={`${site.name} — accueil`}>
+          <Logo />
         </Link>
         <nav className="navbar__nav" aria-label="Navigation principale">
           <ul className="navbar__list">
@@ -322,8 +313,8 @@ export default function Header() {
           </ul>
         </nav>
         <div className="navbar__actions">
-          <a href={phone.href} className="navbar__phone"><PhoneIcon />{phone.label}</a>
-          <Link href="/#contact" className="btn btn--sm btn--halo">Nous contacter</Link>
+          {phone && <a href={phone.href} className="navbar__phone"><PhoneIcon />{phone.label}</a>}
+          <Link href="/rendez-vous" className="btn btn--sm btn--gold">Rendez-vous</Link>
         </div>
         <button
           type="button"
@@ -337,7 +328,7 @@ export default function Header() {
         </button>
       </div>
       <AnimatePresence>
-        {menu && <MobilePanel id={panelId} isEntry={active.entry} isSub={active.sub} onClose={closeMenu} />}
+        {menu && <MobilePanel id={panelId} phone={phone} isEntry={active.entry} isSub={active.sub} onClose={closeMenu} />}
       </AnimatePresence>
     </header>
   );

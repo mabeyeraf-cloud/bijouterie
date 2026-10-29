@@ -3,25 +3,23 @@ import bcrypt from "bcryptjs";
 
 const db = new PrismaClient();
 
+/* Crée (ou met à jour) le compte administrateur à partir de ADMIN_EMAIL et ADMIN_PASSWORD.
+   Lancé à chaque déploiement Vercel : changer ADMIN_PASSWORD puis redéployer change le mot de passe. */
 async function main() {
   const email = process.env.ADMIN_EMAIL, password = process.env.ADMIN_PASSWORD;
-  if (!email || !password) throw new Error("Renseigne ADMIN_EMAIL et ADMIN_PASSWORD dans .env");
+  if (!email || !password) {
+    console.warn("Compte administrateur non créé : renseignez ADMIN_EMAIL et ADMIN_PASSWORD.");
+    return;
+  }
+  if (password.length < 10) {
+    console.warn("Compte administrateur non créé : ADMIN_PASSWORD doit faire au moins 10 caractères.");
+    return;
+  }
   await db.user.upsert({
-    where: { email: email.toLowerCase() }, update: {},
+    where: { email: email.toLowerCase() },
+    update: { passwordHash: await bcrypt.hash(password, 10), role: "ADMIN" },
     create: { email: email.toLowerCase(), name: "Administrateur", role: "ADMIN", passwordHash: await bcrypt.hash(password, 10) },
   });
-  if ((await db.product.count()) === 0) {
-    await db.product.create({
-      data: {
-        slug: "logiciel-exemple", name: "Logiciel de gestion (exemple)",
-        description: "Produit d'exemple à remplacer par vos vrais logiciels depuis l'administration.",
-        plans: { create: [
-          { label: "Mensuel", interval: "MONTH", priceXof: 25000 },
-          { label: "Annuel", interval: "YEAR", priceXof: 250000 },
-        ] },
-      },
-    });
-  }
-  console.log("Seed terminé.");
+  console.log("Compte administrateur prêt :", email.toLowerCase());
 }
 main().finally(() => db.$disconnect());

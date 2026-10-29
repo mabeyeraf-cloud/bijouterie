@@ -9,3 +9,7 @@ node_modules
 # Outils locaux (Claude Code, MCP)
 .claude/
 .mcp.json
+
+# Lien local vers un projet Vercel : ne jamais le versionner
+.vercel
+*.tsbuildinfo

@@ -1,4 +1,4 @@
-// Schéma de base de données du site Groupe SAGFA.
+// Schéma de base de données du site de la bijouterie.
 // Montants en FCFA (entiers, sans décimales).
 
 generator client {
@@ -15,30 +15,6 @@ enum Role {
   ADMIN
 }
 
-enum Interval {
-  MONTH
-  YEAR
-}
-
-enum OrderStatus {
-  PENDING
-  PAID
-  FAILED
-  CANCELED
-}
-
-enum SubscriptionStatus {
-  ACTIVE
-  EXPIRED
-  CANCELED
-}
-
-enum PaymentProvider {
-  WAVE
-  ORANGE_MONEY
-  STRIPE
-}
-
 enum AppointmentStatus {
   NEW
   CONFIRMED
@@ -46,6 +22,7 @@ enum AppointmentStatus {
   CANCELED
 }
 
+// Compte d'accès à l'administration (créé par « npm run db:seed »).
 model User {
   id           String   @id @default(cuid())
   email        String   @unique
@@ -54,113 +31,51 @@ model User {
   passwordHash String
   role         Role     @default(CLIENT)
   createdAt    DateTime @default(now())
-  orders       Order[]
-  subscriptions Subscription[]
 }
 
-model Product {
-  id          String  @id @default(cuid())
-  slug        String  @unique
+// Catalogue : un bijou présenté sur le site. La photo est stockée dans la base (4 Mo maximum).
+model Bijou {
+  id          String   @id @default(cuid())
+  slug        String   @unique
   name        String
-  description String
-  active      Boolean @default(true)
-  plans       Plan[]
+  category    String // bagues, colliers, boucles, bracelets, parures (voir src/lib/site.ts)
+  material    String   @default("") // ex. « Or 18 carats, diamant »
+  description String   @default("")
+  priceXof    Int? // vide = « Prix sur demande »
+  photo       Bytes?
+  photoType   String?
+  featured    Boolean  @default(false) // affiché sur l'accueil
+  active      Boolean  @default(true) // masqué du site si false
+  position    Int      @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 }
 
-model Plan {
-  id        String   @id @default(cuid())
-  productId String
-  product   Product  @relation(fields: [productId], references: [id])
-  label     String
-  interval  Interval
-  priceXof  Int
-  active    Boolean  @default(true)
-  orders    Order[]
-}
-
-model Order {
-  id        String      @id @default(cuid())
-  userId    String
-  user      User        @relation(fields: [userId], references: [id])
-  planId    String
-  plan      Plan        @relation(fields: [planId], references: [id])
-  amountXof Int
-  status    OrderStatus @default(PENDING)
-  createdAt DateTime    @default(now())
-  payments  Payment[]
-  subscription Subscription?
-}
-
-model Payment {
-  id          String          @id @default(cuid())
-  orderId     String
-  order       Order           @relation(fields: [orderId], references: [id])
-  provider    PaymentProvider
-  providerRef String?         @unique
-  amountXof   Int
-  confirmedAt DateTime?
-  createdAt   DateTime        @default(now())
-}
-
-model Subscription {
-  id        String             @id @default(cuid())
-  userId    String
-  user      User               @relation(fields: [userId], references: [id])
-  orderId   String             @unique
-  order     Order              @relation(fields: [orderId], references: [id])
-  status    SubscriptionStatus @default(ACTIVE)
-  startsAt  DateTime
-  renewsAt  DateTime
-}
-
+// Demandes envoyées depuis le site : rendez-vous (kind = "RDV") ou message (kind = "CONTACT").
 model AppointmentRequest {
-  id        String            @id @default(cuid())
-  name      String
-  phone     String
-  email     String?
-  pole      String
-  message   String?
-  status    AppointmentStatus @default(NEW)
-  kind          String   @default("CONTACT") // "RDV" (rendez-vous) ou "CONTACT" (message)
-  wantedDate    String?                      // jour proposé par le visiteur, AAAA-MM-JJ
-  wantedTime    String?                      // heure proposée, HH:MM
-  confirmedDate String?                      // jour confirmé par l'équipe
-  confirmedTime String?                      // heure confirmée par l'équipe
-  createdAt DateTime          @default(now())
+  id            String            @id @default(cuid())
+  kind          String            @default("CONTACT")
+  name          String
+  phone         String
+  email         String?
+  subject       String
+  piece         String? // bijou qui intéresse le visiteur
+  message       String?
+  status        AppointmentStatus @default(NEW)
+  wantedDate    String? // jour proposé par le visiteur, AAAA-MM-JJ
+  wantedTime    String? // heure proposée, HH:MM
+  confirmedDate String? // jour confirmé par la boutique
+  confirmedTime String? // heure confirmée par la boutique
+  createdAt     DateTime          @default(now())
 }
 
-model Reference {
-  id       String @id @default(cuid())
-  name     String
-  logoUrl  String?
-  position Int    @default(0)
-}
-
-model KeyFigure {
-  id       String @id @default(cuid())
-  label    String
-  value    String
-  position Int    @default(0)
-}
-
-// Compte d'accès à l'espace adhérent IPM.
-// Les données de santé restent dans le logiciel IPM existant : on ne stocke ici que l'accès.
-model Adherent {
-  id              String    @id @default(cuid())
-  memberNumber    String    @unique
-  phone           String
-  passwordHash    String
-  phoneVerifiedAt DateTime?
-  createdAt       DateTime  @default(now())
-}
-
-// Coordonnées du site modifiables depuis /admin (clé = telephone, whatsapp, email, adresse, horaires, facebook...).
+// Coordonnées du site modifiables depuis /admin (clé = telephone, whatsapp, email, adresse, horaires, instagram...).
 model SiteSetting {
   key   String @id
   value String @default("")
 }
 
-// Membres de l'équipe affichés sur la page « À propos ». La photo est stockée dans la base (2 Mo maximum).
+// Artisans et équipe affichés sur la page « La Maison ». La photo est stockée dans la base (2 Mo maximum).
 model TeamMember {
   id        String   @id @default(cuid())
   name      String

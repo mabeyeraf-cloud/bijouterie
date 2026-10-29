@@ -9,31 +9,33 @@ export default async function MentionsLegales() {
   return (
     <section className="section">
       <div className="wrap prose">
+        <span className="eyebrow">Informations</span>
         <h1>Mentions légales</h1>
 
         <h2>Éditeur du site</h2>
         <p>
           {legal.raisonSociale}, {legal.formeJuridique}<br />
-          Capital : {legal.capital}<br />
-          NINEA : {legal.ninea} · RCCM : {legal.rccm}<br />
-          Siège : {contact.adresse}<br />
-          Téléphone : {contact.telephone} · Email : {contact.email}<br />
-          Responsable de la publication : {legal.responsablePublication}
+          Capital : {legal.capital}<br />
+          NINEA : {legal.ninea} · RCCM : {legal.rccm}<br />
+          Siège : {contact.adresse}<br />
+          Téléphone : {contact.telephone} · Email : {contact.email}<br />
+          Responsable de la publication : {legal.responsablePublication}
         </p>
 
         <h2>Hébergement</h2>
-        <p>Le site {site.url} est hébergé par : {legal.hebergeur}.</p>
+        <p>Le site {site.url} est hébergé par : {legal.hebergeur}.</p>
 
         <h2>Propriété intellectuelle</h2>
         <p>
-          Les textes, logos, graphismes et éléments du site, y compris la plateforme SAGFA360, appartiennent à
+          Les textes, logos, dessins, photographies de bijoux et éléments du site appartiennent à
           {" "}{legal.raisonSociale}. Toute reproduction sans autorisation écrite est interdite.
         </p>
 
         <h2>Responsabilité</h2>
         <p>
-          Nous veillons à l’exactitude des informations publiées, mais elles sont données à titre indicatif et peuvent
-          évoluer. {legal.raisonSociale} ne saurait être tenue responsable d’une erreur ou d’une indisponibilité du site.
+          Nous veillons à l’exactitude des informations publiées (descriptions, prix, disponibilité), mais elles sont
+          données à titre indicatif et peuvent évoluer ; le prix et la disponibilité d’une pièce sont confirmés au moment
+          de la commande. {legal.raisonSociale} ne saurait être tenue responsable d’une erreur ou d’une indisponibilité du site.
         </p>
 
         <h2>Données personnelles</h2>

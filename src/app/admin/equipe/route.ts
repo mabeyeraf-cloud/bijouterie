@@ -14,7 +14,7 @@ export async function POST(req: Request) {
 
   if (s("intent") === "delete") {
     if (id) await db.teamMember.delete({ where: { id } });
-    revalidatePath("/a-propos");
+    revalidatePath("/la-maison");
     return back("ok=1");
   }
 
@@ -41,6 +41,6 @@ export async function POST(req: Request) {
   if (id) await db.teamMember.update({ where: { id }, data: payload });
   else await db.teamMember.create({ data: payload });
 
-  revalidatePath("/a-propos");
+  revalidatePath("/la-maison");
   return back("ok=1");
 }

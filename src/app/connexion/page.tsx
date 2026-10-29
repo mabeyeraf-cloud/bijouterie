@@ -11,14 +11,15 @@ export default async function Connexion({ searchParams }: { searchParams: Promis
   if (user?.role === "ADMIN") redirect("/admin");
   const { erreur } = await searchParams;
   return (
-    <section className="section theme-classic">
-      <div className="wrap">
+    <section className="section">
+      <div className="wrap" style={{ maxWidth: 520 }}>
+        <span className="eyebrow">Espace réservé</span>
+        <h1 style={{ fontSize: "clamp(2.4rem, 5vw, 3.4rem)" }}>Administration</h1>
         <Flash error={erreur} />
-        <form action={login} className="form">
-          <h2>Administration</h2>
+        <form action={login} className="form carte-form">
           <label>Email<input name="email" type="email" required autoComplete="email" /></label>
           <label>Mot de passe<input name="password" type="password" required autoComplete="current-password" /></label>
-          <button className="btn">Se connecter</button>
+          <button className="btn btn--noir">Se connecter</button>
         </form>
       </div>
     </section>

@@ -9,17 +9,19 @@ export default async function Confidentialite() {
   return (
     <section className="section">
       <div className="wrap prose">
+        <span className="eyebrow">Informations</span>
         <h1>Politique de confidentialité</h1>
         <p>{legal.raisonSociale} protège les données personnelles de ses visiteurs. Voici ce que nous collectons et pourquoi.</p>
 
         <h2>Données collectées</h2>
         <p>
           Lorsque vous remplissez le formulaire de contact ou de rendez-vous, nous recueillons votre nom, votre numéro
-          de téléphone, votre email (facultatif), le sujet de votre demande et votre message (facultatif).
+          de téléphone, votre email (facultatif), le motif de votre demande, la pièce qui vous intéresse et votre message
+          (facultatifs).
         </p>
 
         <h2>Pourquoi nous les utilisons</h2>
-        <p>Uniquement pour répondre à votre demande, vous rappeler et fixer un rendez-vous. Elles ne sont ni vendues, ni cédées à des tiers à des fins commerciales.</p>
+        <p>Uniquement pour répondre à votre demande, vous rappeler, fixer un rendez-vous et préparer votre commande. Elles ne sont ni vendues, ni cédées à des tiers à des fins commerciales.</p>
 
         <h2>Qui y a accès</h2>
         <p>L’équipe de {legal.raisonSociale}, ainsi que nos prestataires techniques d’hébergement et d’envoi d’emails, strictement pour faire fonctionner le site.</p>

@@ -1,16 +1,18 @@
 import { ImageResponse } from "next/og";
+import { site } from "@/lib/site";
 
-export const alt = "Groupe SAGFA — Cabinet de gestion à Dakar";
+export const alt = `${site.name} — Bijouterie et joaillerie à Dakar`;
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
 export default function Image() {
   return new ImageResponse(
     (
-      <div style={{ width: "100%", height: "100%", display: "flex", flexDirection: "column", justifyContent: "center", padding: "80px", background: "#0F4D4A", color: "#F7F5EE" }}>
-        <div style={{ display: "flex", fontSize: 30, letterSpacing: 6, color: "#8faa99" }}>CABINET DE GESTION · DAKAR</div>
-        <div style={{ display: "flex", fontSize: 112, fontWeight: 800, marginTop: 24 }}>GROUPE SAGFA</div>
-        <div style={{ display: "flex", fontSize: 38, marginTop: 28, color: "#d8c5a5" }}>Comptabilité · Fiscalité · Paie · IPM · Informatique</div>
+      <div style={{ width: "100%", height: "100%", display: "flex", flexDirection: "column", justifyContent: "center", padding: "90px", background: "#0F0D0B", color: "#F5EFE4" }}>
+        <div style={{ display: "flex", fontSize: 26, letterSpacing: 10, color: "#C9A15E" }}>BIJOUTERIE · JOAILLERIE · DAKAR</div>
+        <div style={{ display: "flex", fontSize: 120, marginTop: 28, letterSpacing: 8 }}>{site.name.toUpperCase()}</div>
+        <div style={{ display: "flex", width: 120, height: 2, background: "#C9A15E", marginTop: 36 }} />
+        <div style={{ display: "flex", fontSize: 38, marginTop: 36, color: "#A89E92" }}>Bagues · Colliers · Alliances · Créations sur mesure</div>
       </div>
     ),
     size
