@@ -1,34 +1,13 @@
-# Site du Groupe SAGFA — socle du projet
+# Bijouterie Darou Karim
 
-Next.js 15 (App Router) + TypeScript + PostgreSQL (Prisma). Texte du site en français.
+Site vitrine + catalogue (Next.js 15, TypeScript). Les commandes passent par WhatsApp.
 
-## Lancer dans GitHub Codespaces
-1. Pousse ce dossier dans un dépôt GitHub **privé**.
-2. Sur le dépôt : **Code → Codespaces → Create codespace**. L'environnement (Node 20 + PostgreSQL) se prépare tout seul.
-3. Dans le terminal du Codespace :
-   ```bash
-   npx prisma migrate dev --name init
-   npm run dev
-   ```
-4. Ouvre l'aperçu du port 3000 proposé par GitHub.
-
-## Lancer sur ton ordinateur
-Installe Node.js 20+ et PostgreSQL, copie `.env.example` en `.env` (adapte `DATABASE_URL`), puis :
 ```bash
+cp .env.example .env.local   # puis renseigne le numéro WhatsApp
 npm install
-npx prisma migrate dev --name init
-npm run dev        # http://localhost:3000
+npm run dev                  # http://localhost:3000
 ```
 
-## Ce qui est dans ce socle
-- Structure, design (tokens dans `src/app/globals.css`), en-tête, pied de page, bouton WhatsApp
-- Pages : accueil, Comptabilité, Fiscalité, Informatique, IPM, Logiciels, À propos, Contact (textes provisoires)
-- Schéma de base de données complet (clients, produits, formules, commandes, paiements, abonnements, rendez-vous, références, adhérents)
-
-## À venir dans la version complète
-Boutique et paiements (Wave, Orange Money, Stripe), comptes clients, espace adhérent IPM, back-office, formulaire de rendez-vous, notifications WhatsApp et email, références et chiffres clés, SEO local.
-
 ## À personnaliser
-- `src/lib/site.ts` : nom, textes des pôles, téléphone, WhatsApp
-- `src/app/globals.css` : couleurs et polices (à aligner sur la charte du groupe)
-- Ne commit jamais le fichier `.env`.
+- `src/lib/site.ts` : nom, adresse, horaires, téléphone, réseaux.
+- `src/lib/products.ts` : catégories et bijoux du catalogue (ajoute `image: "/bijoux/xxx.jpg"` en mettant la photo dans `public/bijoux/`).

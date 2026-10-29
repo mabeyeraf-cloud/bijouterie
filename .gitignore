@@ -9,3 +9,5 @@ node_modules
 # Outils locaux (Claude Code, MCP)
 .claude/
 .mcp.json
+
+*.tsbuildinfo
